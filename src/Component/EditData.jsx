@@ -2,12 +2,16 @@ import React from 'react';
 
 class EditData extends React.Component {
 
+    onCloseModal = () => {
+        this.props.hideEditModal();
+    }
+
     render() {
         return (
-            <div className="layer" style={{ display: 'block' }}>
+            <div className="layer" style={{ display: this.props.display }}>
                 <div className="layer-title">
                     <span>编辑数据</span>
-                    <span className="close" >&Chi;</span>
+                    <span className="close" onClick={this.onCloseModal} >&Chi;</span>
                 </div>
                 <form className="layer-content">
                     <div>

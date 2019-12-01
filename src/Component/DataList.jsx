@@ -2,6 +2,10 @@ import React from 'react';
 
 class DataList extends React.Component {
 
+    onEditBtnClick = () => {
+        this.props.showEditModal();
+    }
+
     render() {
         return (
             <table className="tableContent">
@@ -20,8 +24,8 @@ class DataList extends React.Component {
                         <td data-index={1}>教师</td>
                         <td>
                             <div className="operation">
-                                <button data-index={1} disabled={false}>编辑</button>
-                                <button data-index={1} disabled={false}>删除</button>
+                                <button data-index={1} disabled={this.props.disabled}>编辑</button>
+                                <button data-index={1} disabled={this.props.disabled}>删除</button>
                             </div>
                         </td>
                     </tr>
