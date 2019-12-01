@@ -37,6 +37,7 @@ class EditData extends React.Component {
                         </select>
                     </div>
                 </form>
+                <button className="submit">确定</button>
             </div>
         )
     }
