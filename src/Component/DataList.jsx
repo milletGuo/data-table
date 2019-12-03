@@ -6,6 +6,10 @@ class DataList extends React.Component {
         this.props.showEditModal();
     }
 
+    onDeleteBtnClick = (index) => {
+        console.log(index);
+    }
+
     render() {
         return (
             <table className="tableContent">
@@ -17,18 +21,24 @@ class DataList extends React.Component {
                         <th>角色</th>
                         <th>操作</th>
                     </tr>
-                    <tr>
-                        <td data-index={1}>姓名</td>
-                        <td data-index={1}>男</td>
-                        <td data-index={1}>27</td>
-                        <td data-index={1}>教师</td>
-                        <td>
-                            <div className="operation">
-                                <button data-index={1} disabled={this.props.disabled}>编辑</button>
-                                <button data-index={1} disabled={this.props.disabled}>删除</button>
-                            </div>
-                        </td>
-                    </tr>
+                    {
+                        this.props.dataToShow.map((data) => {
+                            return (
+                                <tr key={data.index} >
+                                    <td>{data.name}</td>
+                                    <td>{data.sex}</td>
+                                    <td>{data.age}</td>
+                                    <td>{data.role}</td>
+                                    <td>
+                                        <div className="operation">
+                                            <button onClick={() => this.onEditBtnClick(data.index)} disabled={this.props.disabled}>编辑</button>
+                                            <button onClick={() => this.onDeleteBtnClick(data.index)} disabled={this.props.disabled}>删除</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            );
+                        })
+                    }
                 </tbody>
             </table>
         )
