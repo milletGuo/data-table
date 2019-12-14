@@ -11,8 +11,16 @@ class DataTable extends React.Component {
         this.state = {
             display: 'none',
             disabled: false,
-            dataToShow: [{ index: 2, name: '王老师', sex: '女', age: 25, role: '教师' }],
-            dataToEdit: {},
+            status: '',
+            dataList: [],
+            queryResult: [],
+            dataToShow: [],
+            dataToEdit: {
+                name: '',
+                age: '',
+                sex: '男',
+                role: '教师',
+            },
         }
     }
 
@@ -24,29 +32,74 @@ class DataTable extends React.Component {
         this.setState({ dataToEdit });
     }
 
-    showEditModal = () => {
-        this.setState({ display: 'block', disabled: true });
+    createData = (formData) => {
+        let dataList = this.state.dataList.slice();
+        let index = getMaxIndex(dataList);
+        formData.index = index;
+        dataList.push(formData);
+        this.showData(dataList);
+        this.setState({ dataList });
+    }
+
+    showData(data) {
+        let dataToShow = data.slice();
+        if (data.length > 5) {
+            dataToShow = data.filter((item, index) => {
+                return index < 5;
+            });
+            this.setState({ dataToShow: dataToShow });
+        } else {
+            this.setState({ dataToShow: dataToShow });
+        }
+    }
+
+    showEditModal = (status) => {
+        this.setState({ display: 'block', disabled: true, status });
     }
 
     hideEditModal = () => {
-        this.setState({ display: 'none', disabled: false });
+        let dataToEdit = this.state.dataToEdit;
+        for (let key in dataToEdit) {
+            dataToEdit[key] = '';
+        }
+        this.setState({ display: 'none', disabled: false, dataToEdit });
     }
 
     componentDidMount() {
-        // let data = JSON.parse(localStorage.getItem('data'));
-        this.setState({ dataToShow: [{ index: 2, name: '王老师', sex: '女', age: 25, role: '教师' }] })
+        if (localStorage.getItem('data') !== 'undefined') {
+            let dataList = JSON.parse(localStorage.getItem('data'));
+            this.showData(dataList);
+            this.setState({ dataList });
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        localStorage.setItem('data', JSON.stringify(this.state.dataList));
     }
 
     render() {
         return (
             <div className="tableBox">
-                <TableTools showEditModal={this.showEditModal} />
-                <DataList disabled={this.state.disabled} dataToShow={this.state.dataToShow} showEditModal={this.showEditModal} />
+                <TableTools showEditModal={(status) => this.showEditModal(status)} />
+                <DataList disabled={this.state.disabled} dataToShow={this.state.dataToShow} showEditModal={(status) => this.showEditModal(status)} />
                 <TablePagination />
-                <EditData display={this.state.display} dataToEdit={this.state.dataToEdit} hideEditModal={this.hideEditModal} onHandleChange={this.onHandleChange} />
+                <EditData
+                    display={this.state.display}
+                    status={this.state.status}
+                    dataToEdit={this.state.dataToEdit}
+                    hideEditModal={this.hideEditModal}
+                    onHandleChange={this.onHandleChange}
+                    createData={(formData) => this.createData(formData)} />
             </div>
         )
     }
+}
+
+function getMaxIndex(data) {
+    let dataList = data.map((item) => {
+        return item.index;
+    });
+    return dataList.length === 0 ? 0 : Math.max.apply(null, dataList);
 }
 
 export default DataTable;

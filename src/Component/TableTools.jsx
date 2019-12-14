@@ -3,7 +3,7 @@ import React from 'react';
 class TableTools extends React.Component {
 
     onCreatBtnClick = () => {
-        this.props.showEditModal();
+        this.props.showEditModal('create');
     }
 
     render() {
